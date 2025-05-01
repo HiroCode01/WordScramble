@@ -29,6 +29,7 @@ struct ContentView: View {
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
+            .onAppear(perform: startGame)
         }
     }
     
@@ -39,6 +40,17 @@ struct ContentView: View {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+    }
+    
+    func startGame() {
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+            if let startWords = try? String(contentsOf: startWordsURL, encoding: .utf8) {
+                let allWords = startWords.split(separator: "\n")
+                rootWord = String(allWords.randomElement() ?? "")
+                return
+            }
+        }
+        fatalError( "Couldn't load start words!" )
     }
 }
 
