@@ -46,6 +46,16 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
         
+        guard isNotShort(word: answer) else {
+            wordError(title: "Word is too short", message: "Try to use word more than 3 letters long")
+            return
+        }
+        
+        guard isNotSimilarToRootWord(word: answer) else {
+            wordError(title: "Word is similar to start word", message: "Do not use start word")
+            return
+        }
+        
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original")
             return
@@ -76,6 +86,14 @@ struct ContentView: View {
             }
         }
         fatalError( "Couldn't load start words!" )
+    }
+    
+    func isNotShort(word: String) -> Bool {
+        return word.count >= 3 ? true : false
+    }
+    
+    func isNotSimilarToRootWord(word: String) -> Bool {
+        return word != rootWord ? true : false
     }
     
     func isOriginal(word: String) -> Bool {
