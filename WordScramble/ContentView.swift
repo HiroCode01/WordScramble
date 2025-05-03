@@ -18,26 +18,50 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    TextField("Enter you word", text: $newWord)
-                        .textInputAutocapitalization(.never)
-                }
+            VStack {
+                Text("Score: \(usedWords.count)")
+                    .font(.headline)
+                    .fontWeight(.bold)
                 
-                
-                Section {
-                    ForEach(usedWords, id: \.self) { word in
-                        Text(word)
+                List {
+                    Section {
+                        TextField("Enter you word", text: $newWord)
+                            .textInputAutocapitalization(.never)
+                    }
+                    
+                    Section {
+                        ForEach(usedWords, id: \.self) { word in
+                            HStack {
+                                Image(systemName: "\(word.count).square.fill")
+                                    .font(.title2)
+                                Text(word)
+                                    .font(.title2)
+                                    .padding(.horizontal)
+                            }
+                        }
                     }
                 }
             }
             .navigationTitle(rootWord)
+            .navigationBarTitleDisplayMode(.large)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
-            .alert(errorTitle, isPresented: $showingError) {
-                
-            } message: {
+            .alert(errorTitle, isPresented: $showingError) {} message: {
                 Text(errorMessage)
+            }
+            .toolbar {
+                Button {
+                    startGame()
+                    newWord = ""
+                    usedWords = []
+                } label: {
+                    Text("New Game")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .padding(5)
+                        .background(.black)
+                        .clipShape(.rect(cornerRadius: 10))
+                }
             }
         }
     }
