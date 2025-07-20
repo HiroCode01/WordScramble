@@ -38,6 +38,9 @@ struct ContentView: View {
                                     .font(.title2)
                                     .padding(.horizontal)
                             }
+                            .accessibilityElement()
+                            .accessibilityLabel(word)
+                            .accessibilityHint("\(word.count) letters")
                         }
                     }
                 }
